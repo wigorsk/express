@@ -4,7 +4,11 @@ class ContactRepository {
 
   async listAll(orderBy = 'ASC') {
     const direction = orderBy.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-    const row = await db.query(`SELECT * FROM contacts ORDER BY name ${direction}`);
+    const row = await db.query(`
+      SELECT contacts.*, categories.name AS category_name
+      FROM contacts
+      LEFT JOIN categories ON categories.id = contacts.category_id
+      ORDER BY name ${direction}`);
     return row;
   }
 
